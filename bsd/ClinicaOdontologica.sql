@@ -2906,7 +2906,7 @@ $$;
     $$;
 
     --Prueba del procedimiento anterior
-    CALL crearUsuario('miclave123', 'nuevo@correo.com', 3);
+    CALL Seguridad.crearUsuario('miclave123', 'nuevo@correo.com', 3);
 
 
 

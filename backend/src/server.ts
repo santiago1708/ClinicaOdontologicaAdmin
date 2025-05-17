@@ -1,5 +1,5 @@
 import express from 'express';
-import router from './Routes/Usuarios.routes';
+import routerUsuarios from './Routes/Usuarios.routes';
 
 const app = express();
 
@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));   
 
-app.use('/api', router)
+app.use('/api', routerUsuarios)
 
 
 export default app;

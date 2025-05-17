@@ -975,7 +975,7 @@ ALTER TABLE Clinica.CItaTratamiento ADD CONSTRAINT FK_CIT_Tratamiento FOREIGN KE
 
 --usuario odontologo
     GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA Pacientes, Personal, Clinica, Tratamientos TO odontologo;
-    GRANT SELECT, INSERT, UPDATE, DELETE ON ALL SEQUENCES IN SCHEMA Pacientes, Personal, Clinica, Tratamientos TO odontologo;
+    GRANT SELECT ON ALL SEQUENCES IN SCHEMA Pacientes, Personal, Clinica, Tratamientos TO odontologo;
     GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA Pacientes, Personal, Clinica, Tratamientos TO odontologo;
 
 --usuario paciente
@@ -986,6 +986,11 @@ ALTER TABLE Clinica.CItaTratamiento ADD CONSTRAINT FK_CIT_Tratamiento FOREIGN KE
     GRANT SELECT ON Clinica.TodaslasCitas TO paciente;
     GRANT SELECT ON Clinica.CitasPendientes TO paciente;
     GRANT SELECT ON Clinica.CitasConfirmadas TO paciente;
+
+    GRANT USAGE ON SCHEMA Pacientes TO paciente;
+    GRANT USAGE ON SCHEMA Clinica TO paciente;
+    GRANT USAGE ON SCHEMA Facturacion TO paciente;
+
 
 -- Funciones para las tablas de auditoria
 

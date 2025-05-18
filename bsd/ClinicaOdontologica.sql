@@ -2878,14 +2878,12 @@ $$;
     FOR EACH ROW EXECUTE FUNCTION prevenirEmailDuplicado();
 
 
-    --Procedimiento para crear un nuevo usuario
-    CREATE OR REPLACE PROCEDURE Seguridad.crearUsuario(
-        p_contrasenaUsuario VARCHAR(50),
+    --Funcion para crear un nuevo usuario
+    CREATE OR REPLACE FUNCTION Seguridad.crearUsuario(
+        p_contraseñaUsuario VARCHAR(50),
         p_emailUsuario VARCHAR(100),
         p_idRol INT
-    )
-    LANGUAGE plpgsql
-    AS $$
+    ) RETURNS INT AS $$
     DECLARE
         v_idUsuario INT;
     BEGIN
@@ -2895,18 +2893,21 @@ $$;
             idRol,
             estadoUsuario
         ) VALUES (
-            p_contrasenaUsuario,
+            p_contraseñaUsuario,
             p_emailUsuario,
             p_idRol,
             'Activo'  
         ) RETURNING idUsuario INTO v_idUsuario;
 
         RAISE NOTICE 'Usuario creado exitosamente con ID %', v_idUsuario;
+
+        RETURN v_idUsuario;
     END;
-    $$;
+    $$ LANGUAGE plpgsql;
+
 
     --Prueba del procedimiento anterior
-    CALL Seguridad.crearUsuario('miclave123', 'nuevo@correo.com', 3);
+    SELECT Seguridad.crearUsuario('miclave123', 'nuevo@correo.com', 3) ;
 
 
 
@@ -2937,3 +2938,112 @@ $$;
 
     --Prueba del procedimiento anterior
     CALL seguridad.editarUsuario(13, 'Hola123');
+
+    --Prodecimiento para crear un paciente
+    CREATE OR REPLACE PROCEDURE Pacientes.crearpaciente(
+        p_numeroDocumentoPaciente INT,
+        p_NombreUnoPaciente TEXT,
+        p_NombreDosPaciente TEXT,
+        p_ApellidounoPaciente TEXT,
+        p_ApellidodosPaciente TEXT,
+        p_fechaNacimientoPaciente DATE,
+        p_pesopaciente int,
+        p_alturapaciente NUMERIC(3,2),
+        p_numeroTelefonoPaciente BIGINT,
+        tipoafiliacion INT,
+        p_contrasenaUsuario VARCHAR(50),
+        p_emailUsuario VARCHAR(100)
+    )
+    LANGUAGE plpgsql AS $$
+    DECLARE 
+        v_codhistorial INT;
+        v_idUsuario INT;
+
+    BEGIN
+        IF EXISTS (
+            SELECT 1 FROM Pacientes.Paciente 
+            WHERE NumDocumentoPaciente = p_numeroDocumentoPaciente
+        ) THEN
+            RAISE EXCEPTION 'El paciente con documento % ya existe.', p_numeroDocumentoPaciente;
+        END IF;
+
+    INSERT INTO Clinica.HistorialClinico(
+        diagnosticohistorialclinico,
+        EstadoHistorialClinico,
+        IdEstadoTratamiento
+    ) VALUES (
+        'Sin diagnosticar',
+        'Activo',
+        2
+    ) RETURNING CodHistorial INTO v_codhistorial;
+
+    v_idUsuario := Seguridad.crearUsuario(
+        p_contrasenaUsuario,
+        p_emailUsuario,
+        3
+    );
+
+    INSERT INTO Pacientes.Paciente (
+        NumDocumentoPaciente,
+        NombreUnoPaciente,
+        NombreDosPaciente,
+        ApellidoUnoPaciente,
+        ApellidoDosPaciente,
+        Fechanacimiento,
+        AlturaPaciente,
+        EstadoPaciente,
+        CodAfiliacion,
+        CodHistorial,
+        idUsuario
+    ) VALUES (
+        p_numeroDocumentoPaciente,
+        p_NombreUnoPaciente,
+        p_NombreDosPaciente,
+        p_ApellidounoPaciente,
+        p_ApellidodosPaciente,
+        p_fechaNacimientoPaciente,
+        p_alturapaciente,
+        'Activo',
+        tipoafiliacion,
+        v_codhistorial,
+        v_idUsuario
+    );
+
+    INSERT INTO Pacientes.pesopaciente (
+        PesoPaciente,
+        estadopeso,
+        NumeroIdentificacionPaciente
+    ) VALUES (
+        p_pesopaciente,
+        'Activo',
+        p_numeroDocumentoPaciente
+    );
+
+    INSERT INTO Pacientes.numerotelefonopaciente (
+        NumeroTelefonoPa,
+        EstadoNumeroTelPaciente,
+        NumeroIdentificacionPaciente
+    ) VALUES (
+        p_numeroTelefonoPaciente,
+        'Activo',
+        p_numeroDocumentoPaciente
+    );
+    END;
+    $$;
+
+    --Prueba del procedimiento anterior
+    CALL Pacientes.crearpaciente(
+    '1234567890',              
+    'Carlos',                  
+    'Andrés',                  
+    'Pérez',                   
+    'Lopez',                   
+    '1990-05-10',              
+    72,                        
+    1.75,                      
+    3216549870,                
+    1,                         
+    'claveSegura123',          
+    'carlos.perez@example.com'
+);
+

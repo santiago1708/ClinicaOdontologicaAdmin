@@ -19,7 +19,8 @@ export class UsuariosController {
 
         } catch (error) {
             console.error('Error al iniciar sesión:', error);
-            return res.status(500).json({ message: 'Error al iniciar sesión' });
+            return res.status(500).json({ message: 'Error al iniciar sesión',
+            detalle: error.message });
         }
     }
 
@@ -27,10 +28,10 @@ export class UsuariosController {
         const {contraseñausuario, emailusuario, rolusuario} = req.body;
         try {
             const query = `
-                CALL seguridad.crearUsuario(
-                    p_contrasenaUsuario := $1, 
-                    p_emailUsuario := $2, 
-                    p_idRol := $3
+                SELECT seguridad.crearUsuario(
+                    $1, 
+                    $2, 
+                    $3
                 );
             `;
 
@@ -39,7 +40,8 @@ export class UsuariosController {
             res.status(200).json({Message: 'Usuario creado exitosamente'});
         } catch (error) {
             console.error('Error al crear el usuario:', error);
-            return res.status(500).json({ message: 'Error al crear el usuario' });
+            return res.status(500).json({ message: 'Error al crear el usuario',
+            detalle: error.message });
         }
     }
 
@@ -59,7 +61,8 @@ export class UsuariosController {
 
         } catch (error) {
             console.log('Error al modificar el usuario:', error);
-            res.status(500).json({error: 'Ocurrio un error al modificar el usuario'})
+            res.status(500).json({error: 'Ocurrio un error al modificar el usuario' ,
+            detalle: error.message})
         }
     }
 }

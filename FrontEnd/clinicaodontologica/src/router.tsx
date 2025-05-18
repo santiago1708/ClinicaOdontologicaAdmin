@@ -5,6 +5,9 @@ import HomeOdontologo from './View/Odontologo/HomeOdontologo';
 import HomePaciente from './View/Paciente/HomePaciente';
 import InformacionPersonalPa from './View/Paciente/InformacionPersonalPa';
 import EditarInformacionPaciente from './View/Paciente/EditarInformacionPaciente';
+import Historialclinicodiente from './View/Paciente/Historialclinicodiente';
+import HistorialFactura from './View/Paciente/HistorialFactura';
+import HistorialCitas from './View/Paciente/HistorialCitas';
 
 export default function Router() {
 
@@ -17,6 +20,9 @@ export default function Router() {
                 <Route path='/Homepaciente' element={<HomePaciente />} />
                 <Route path="/informacionpaciente" element={ <InformacionPersonalPa /> }/>
                 <Route path='/paciente/editarinformacion' element={<EditarInformacionPaciente />}/>
+                <Route path='/Homepaciente/historialclinicodiente' element={<Historialclinicodiente />}/>
+                <Route path='/facturas' element={<HistorialFactura />}/>
+                <Route path='/historialcitaspaciente' element={<HistorialCitas />}/>
             </Routes>
         </BrowserRouter>
     )

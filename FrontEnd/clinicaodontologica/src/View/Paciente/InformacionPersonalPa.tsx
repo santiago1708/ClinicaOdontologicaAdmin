@@ -26,7 +26,7 @@ export default function InformacionPersonalPa() {
     const navigate = useNavigate();
 
     const numdocumento = localStorage.getItem("numdocumentopaciente");
-    const idusuario = localStorage.getItem("idusuario");
+    const idusuario = localStorage.getItem("idUsuario");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -47,7 +47,7 @@ export default function InformacionPersonalPa() {
                 try {
                     const imageResponse = await axios.get(`http://localhost:3000/api/paciente/getimage/${idusuario}`);
                     setImagenPaciente(imageResponse.data.image);
-                } catch (imgErr) {
+                } catch (imgErr : unknown) {
                     console.warn("Imagen no encontrada o error:", imgErr.response?.data?.message || imgErr.message);
                     setImagenPaciente(null);
                 }

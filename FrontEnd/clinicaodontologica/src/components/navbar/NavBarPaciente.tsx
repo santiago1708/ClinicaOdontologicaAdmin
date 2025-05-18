@@ -21,7 +21,7 @@ export default function NavbarPaciente() {
                         <Link to="/HomePaciente" className="hover:text-blue-600 transition">Inicio</Link>
                         <Link to="/informacionpaciente" className="hover:text-blue-600 transition">Información Personal</Link>
                         <Link to="/facturas" className="hover:text-blue-600 transition">Historial Factura</Link>
-                        <Link to="/citas" className="hover:text-blue-600 transition">Historial Citas</Link>
+                        <Link to="/historialcitaspaciente" className="hover:text-blue-600 transition">Historial Citas</Link>
                         <Link to="/login" className="hover:text-red-600 transition">Salir</Link>
                     </div>
 

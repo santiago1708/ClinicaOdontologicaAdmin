@@ -789,6 +789,16 @@ DEFAULT nextval
 ALTER TABLE auditoria.TratamientoAuditoria
     ADD CONSTRAINT PK_TratamientoAuditoria PRIMARY KEY (idauditoriatratamiento);
 
+CREATE SEQUENCE auditoria.seq_idauditoriahorarioodontologo
+START 1 INCREMENT 1 MINVALUE 1 NO MAXVALUE CACHE 1;
+ALTER TABLE auditoria.horarioodontologoauditoria 
+    ALTER COLUMN idauditoriahorarioodontologo 
+SET
+DEFAULT nextval
+('auditoria.seq_idauditoriahorarioodontologo');
+ALTER TABLE auditoria.horarioodontologoauditoria
+    ADD CONSTRAINT PK_Horarioodontologoauditoria PRIMARY KEY (idauditoriahorarioodontologo);
+
 -- Declaración de foráneas y primarias
 
 -- Llaves primarias
@@ -2033,7 +2043,7 @@ EXECUTE FUNCTION registroAuditoriaDelete
                 p.ApellidoUnoPaciente || ' ' || 
                 p.ApellidoDosPaciente AS Nombre_Completo,
             p.AlturaPaciente,
-            STRING_AGG(DISTINCT trat.NombreTratamiento, ', ') AS "Tratamiento/s",
+            COALESCE(STRING_AGG(DISTINCT trat.NombreTratamiento, ', '), 'Sin tratamiento asignado') AS "Tratamiento/s",
             hist.DiagnosticoHistorialClinico,
             esttrat.EstadoTratamiento,
             histdiente.FechaRegistro
@@ -2053,8 +2063,9 @@ EXECUTE FUNCTION registroAuditoriaDelete
             ) ultimaCita ON p.NumDocumentoPaciente = ultimaCita.NumeroIdentificadorPaciente
             INNER JOIN Clinica.Cita cita ON p.NumDocumentoPaciente = cita.NumeroIdentificadorPaciente
             INNER JOIN Personal.HorarioOdontologo hor ON cita.CodHorario = hor.CodHorario AND hor.fechahorario = ultimaCita.FechaUltimaCita
-            INNER JOIN Clinica.CitaTratamiento citrat ON cita.CodCita = citrat.PFK_CodCita
-            INNER JOIN Tratamientos.Tratamiento trat ON citrat.PFK_IdTratamiento = trat.IdTratamiento
+            LEFT JOIN Clinica.CitaTratamiento citrat ON cita.CodCita = citrat.PFK_CodCita
+            LEFT JOIN Tratamientos.Tratamiento trat ON citrat.PFK_IdTratamiento = trat.IdTratamiento
+
         WHERE histdiente.FechaRegistro = (
             SELECT MAX(FechaRegistro)
             FROM Clinica.HistorialClinicoDiente 
@@ -2066,6 +2077,7 @@ EXECUTE FUNCTION registroAuditoriaDelete
             hist.DiagnosticoHistorialClinico, esttrat.EstadoTratamiento, 
             histdiente.FechaRegistro, estdiente.EstadoDiente, 
             diente.NumeroDiente, diente.TipoDiente;
+
 
 
 
@@ -2383,8 +2395,8 @@ $$;
     -- Prueba del procedimiento anterior
         CALL Personal.GenerarHorariosLaborales
         (
-            '2025-05-20',   
-            '2025-05-21',    
+            '2025-05-18',   
+            '2025-06-10',    
             '08:00:00',     
             1             
         );

@@ -531,6 +531,8 @@ CREATE TABLE CLinica.CItaTratamiento
 
 
 
+
+
 -- Creación de secuencias de ID para las tablas
 
 -- Seguridad
@@ -2789,9 +2791,9 @@ $$;
 
     --Prueba del procedimiento anterior
     CALL Tratamientos.AgregarTratamiento(
-    'Sellantes Dentales',
-    'Aplicación de material para proteger los dientes de las caries',
-    60000,
+    'Prueba de Tratamiento',
+    'Descripción del tratamiento de prueba',
+    1,
     7
     );
 
@@ -2841,14 +2843,15 @@ $$;
         SELECT 
             u.idUsuario,
             u.Emailusuario::TEXT,
-            CASE WHEN u.idRol = 2 THEN o.codOdontologo ELSE NULL END, -- odontólogo
+            CASE WHEN u.idRol = 1 AND o.especialidad='Jefe' THEN o.codOdontologo
+            WHEN u.idRol = 2 THEN o.codOdontologo ELSE NULL END, -- odontólogo
             CASE WHEN u.idRol = 3 THEN p.numDocumentoPaciente ELSE NULL END, -- paciente
             u.idRol,
             u.estadoUsuario
         FROM seguridad.usuario u
         LEFT JOIN Personal.Odontologo o ON o.idUsuario = u.idUsuario
         LEFT JOIN Pacientes.Paciente p ON p.idUsuario = u.idUsuario 
-        WHERE u.Emailusuario = pemail 
+        WHERE u.Emailusuario = pemail
         AND u.Contraseñausuario = pcontrasena
         AND u.estadoUsuario = 'Activo';
     END;
@@ -3046,4 +3049,29 @@ $$;
     'claveSegura123',          
     'carlos.perez@example.com'
 );
+
+CREATE OR REPLACE FUNCTION Personal.CitasAsignadas(
+    p_codOdontologo INT
+)
+RETURNS TABLE (
+    codcita INT,
+    fechahorario DATE,
+    horahorario TIME,
+    estadoCita estadocitacpc,
+    observaciones TEXT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT 
+        c.codcita,
+        h.fechahorario,
+        h.horahorario,
+        c.EstadoCita,
+        c.Observaciones::TEXT
+    FROM Clinica.Cita c
+    INNER JOIN Personal.HorarioOdontologo h ON c.CodHorario = h.CodHorario
+    WHERE h.CodOdontologo = p_codOdontologo;
+END;    
+$$ LANGUAGE plpgsql;
+
 

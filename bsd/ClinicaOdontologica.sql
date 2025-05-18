@@ -1999,7 +1999,7 @@ EXECUTE FUNCTION registroAuditoriaDelete
         ntp.numerotelefonopa AS Numero_telefonico_del_paciente,
         pes.pesopaciente AS Peso_del_paciente,
         p.Fechanacimiento AS Fecha_nacimiento_del_paciente,
-        af.tipoafiliacion AS Afiliación_del_paciente,
+        af.tipoafiliacion AS Afiliacion_del_paciente,
         ROUND(af.porcentajecobertura, 2)::INT || '%'AS Porcentaje_Cobertura
     FROM Pacientes.paciente p
         INNER JOIN Pacientes.afiliacion af ON p.codafiliacion = af.codafiliacion

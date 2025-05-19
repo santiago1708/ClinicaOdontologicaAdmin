@@ -8,7 +8,6 @@ export default function NavBarAdministrador() {
 
     const toggleMenu = () => setIsOpen(!isOpen);
 
-
     return (
         <nav className="bg-white shadow-md dark:bg-gray-900 dark:text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,12 +21,11 @@ export default function NavBarAdministrador() {
 
                     {/* Botones grandes */}
                     <div className="hidden md:flex space-x-6 items-center">
-                        <Link to="/" className="hover:text-blue-600 transition">Inicio</Link>
-                        <Link to="/servicios" className="hover:text-blue-600 transition">Servicios</Link>
-                        <Link to="/contacto" className="hover:text-blue-600 transition">Contacto</Link>
-                        <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                            Iniciar Sesión
-                        </Link>
+                        <Link to="/Homeadministrador" className="hover:text-blue-600 transition">Administrar Pacientes</Link>
+                        <Link to="/administrartratamientos" className="hover:text-blue-600 transition">Administrar Tratamientos</Link>
+                        <Link to="/diaslaborales" className="hover:text-blue-600 transition">Días Laborales</Link>
+                        <Link to="/auditorias" className="hover:text-blue-600 transition">Auditorías</Link>
+                        <Link to="/login" className="block hover:text-red-600">Salir</Link>
                     </div>
 
                     {/* Botón hamburguesa */}
@@ -42,12 +40,11 @@ export default function NavBarAdministrador() {
             {/* Menú móvil */}
             {isOpen && (
                 <div className="md:hidden px-4 pb-4 space-y-2 bg-white dark:bg-gray-900">
-                    <Link to="/" className="block hover:text-blue-600">Inicio</Link>
-                    <Link to="/servicios" className="block hover:text-blue-600">Servicios</Link>
-                    <Link to="/contacto" className="block hover:text-blue-600">Contacto</Link>
-                    <Link to="/login" className="block bg-blue-600 text-white px-4 py-2 rounded text-center hover:bg-blue-700">
-                        Iniciar Sesión
-                    </Link>
+                    <Link to="/Homeadministrador" className="block hover:text-blue-600">Administrar Pacientes</Link>
+                    <Link to="/administrartratamientos" className="block hover:text-blue-600">Administrar Tratamientos</Link>
+                    <Link to="/diaslaborales" className="block hover:text-blue-600">Días Laborales</Link>
+                    <Link to="/auditorias" className="block hover:text-blue-600">Auditorías</Link>
+                    <Link to="/login" className="block hover:text-blue-600">Salir</Link>
                 </div>
             )}
         </nav>

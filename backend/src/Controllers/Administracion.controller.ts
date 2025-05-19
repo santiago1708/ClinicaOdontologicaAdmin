@@ -21,8 +21,8 @@ export class AdministracionController {
     }
 
     static createpaciente = async (req, res) => {
-        const { numdocumentopaciente, nombreuno, nombredos, apellidouno, apellidodos, fechanacimiento, pesopaciente, alturapaciente, numerotelefono, tipoafiliacion, 
-            contraseñausuario, emailusuario} = req.body;
+        const { numdocumentopaciente, nombreuno, nombredos, apellidouno, apellidodos, fechanacimiento, pesopaciente, alturapaciente, numerotelefono, tipoafiliacion,
+            contraseñausuario, emailusuario } = req.body;
 
         try {
             const query = `
@@ -88,7 +88,7 @@ export class AdministracionController {
     }
 
     static createtratamiento = async (req, res) => {
-        const { nombretratamiento, descripciontratamiento, preciotratamiento, 
+        const { nombretratamiento, descripciontratamiento, preciotratamiento,
             idcategoriatratamiento
         } = req.body;
 
@@ -106,5 +106,6 @@ export class AdministracionController {
             res.status(500).json({ error: "Ocurrió un error al crear el tratamiento", detalle: error.message });
         }
     }
+
 
 }

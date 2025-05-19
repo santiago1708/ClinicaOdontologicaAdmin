@@ -56,7 +56,8 @@ export default function LoginClinica() {
     return (
         <div className="w-screen h-screen flex justify-center items-center bg-gray-100">
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
-                <h2 className="text-center text-2xl font-bold text-gray-800">Inicio de Sesión</h2>
+                <h1 className="text-center text-3xl font-bold text-gray-800">Bienvenid@ a nuestra clinica odontologica!</h1>
+                <h2 className="text-center text-2xl font-bold text-gray-700">Inicio de Sesión</h2>
 
                 {error && <p className="text-center text-red-500">{error}</p>}
 

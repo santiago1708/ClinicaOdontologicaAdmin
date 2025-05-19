@@ -16,6 +16,9 @@ import BuscarFactura from './View/Odontologo/BuscarFactura';
 import BuscarCita from './View/Odontologo/BuscarCita';
 import BuscarHistorialClinico from './View/Odontologo/BuscarHistorialClinico';
 import HistorialDientes from './View/Odontologo/HistorialDientes';
+import CrearTratamiento from './View/Administrador/CrearTratamiento';
+import DiasLaborales from './View/Administrador/DiasLaborales';
+import Auditorias from './View/Administrador/Auditorias';
 
 export default function Router() {
 
@@ -26,6 +29,7 @@ export default function Router() {
                 <Route path='/Homeodontologo' element={<HomeOdontologo />} />
                 <Route path='/Informacionodontologo' element={<InformacionPersonalOdontologo />} />
                 <Route path='/Homepaciente' element={<HomePaciente />} />
+                <Route path='/Homeadministrador' element={<HomeAdministrador />} />
                 <Route path="/informacionpaciente" element={<InformacionPersonalPa />} />
                 <Route path='/paciente/editarinformacion' element={<EditarInformacionPaciente />} />
                 <Route path='/Homepaciente/historialclinicodiente' element={<Historialclinicodiente />} />
@@ -38,6 +42,9 @@ export default function Router() {
                 <Route path='/buscarcitapaciente' element={<BuscarCita />}/>
                 <Route path='/buscarhistorialclinicopaciente' element={<BuscarHistorialClinico />}/>
                 <Route path='/historialdientes/:numdocumentopaciente' element={<HistorialDientes />}/>
+                <Route path='/administrartratamientos' element={<CrearTratamiento />}/>
+                <Route path='/diaslaborales' element={<DiasLaborales />}/>
+                <Route path='/auditorias' element={<Auditorias />}/>
             </Routes>
         </BrowserRouter>
     )

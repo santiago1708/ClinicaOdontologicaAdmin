@@ -9,11 +9,13 @@ router.put('/updateodontologo/:numdocumento', OdontologoController.updateinforma
 router.put('/historialclinicopacienteupdate', OdontologoController.updatehistorialclinicopaciente)
 router.get('/citasasignadas/:idodontologo', OdontologoController.viewcitasasignadas)
 router.post('/agregarfactura', OdontologoController.createfacturacita)
-router.get('/facturaspacienteid' , OdontologoController.viewfacturasporidpaciente)
-router.get('/facturasidcita' , OdontologoController.viewfacturasporidcita)
-router.get('/citaporidpaciente' , OdontologoController.viewcitaporidpaciente)
-router.get('/historialporid' , OdontologoController.viewhistorialclinicoidpaciente)
-router.get('/historialdienteporid' , OdontologoController.viewhistorialclinicodienteidpaciente)
+router.post('/facturaspacienteid' , OdontologoController.viewfacturasporidpaciente)
+router.post('/facturasidcita' , OdontologoController.viewfacturasporidcita)
+router.post('/citaporidpaciente' , OdontologoController.viewcitaporidpaciente)
+router.post('/historialporid' , OdontologoController.viewhistorialclinicoidpaciente)
+router.get('/historialdienteporid/:numdocumentopaciente' , OdontologoController.viewhistorialclinicodienteidpaciente)
+router.get('/listadiente', OdontologoController.viewdientes)
+router.get('/listatratamientos', OdontologoController.viewtratamientos)
 
 
 export default router;

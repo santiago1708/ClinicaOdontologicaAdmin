@@ -132,4 +132,22 @@ export class PacienteController {
             });
         }
     }
+
+    static updateestadocita = async (req, res) => {
+        const { codcita, estadocita} = req.body
+
+        try {
+            const query = `
+                CALL Clinica.ActualizarEstadoAsistenciaCita($1, $2);
+            `;
+            const values = await pool.query(query, [codcita, estadocita]);
+            res.status(200).json({ message: 'Asistencia cancelada exitosamente', data: values.rows[0]})
+        } catch (error) {
+            console.error("Error al agendar cambiar el estado:", error);
+            res.status(500).json({
+            error: "Ocurrió un error al cambiar el estado",
+            detalle: error.message
+            });
+        }
+    }
 }

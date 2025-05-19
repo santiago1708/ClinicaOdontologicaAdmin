@@ -34,11 +34,12 @@ export default function LoginClinica() {
             localStorage.setItem("idUsuario", data.data.idusuario);
             localStorage.setItem("cododontologo", data.data.cododontologo);
             localStorage.setItem("numdocumentopaciente", data.data.numdocumentopaciente);
+            localStorage.setItem("numdocumentoodontologo", data.data.numdocumentoodontolo);
 
             if(data.data.idrol === 1 ) {
                 navigate("/Homeadministrador");
             }else if (data.data.idrol === 2 ) {
-                navigate('7Homeodontologo')
+                navigate('/Homeodontologo')
             }else if (data.data.idrol === 3 ){
                 navigate("/Homepaciente");
             }

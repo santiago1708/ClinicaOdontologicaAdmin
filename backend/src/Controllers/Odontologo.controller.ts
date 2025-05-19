@@ -188,8 +188,8 @@ export class OdontologoController {
         }
     }
 
-        static viewhistorialclinicodienteidpaciente = async (req, res) => {
-        const { numdocumentopaciente } = req.body;
+    static viewhistorialclinicodienteidpaciente = async (req, res) => {
+        const { numdocumentopaciente } = req.params;
 
         try {
             const query = `
@@ -202,6 +202,32 @@ export class OdontologoController {
         } catch (error) {
             console.error("Error buscar el historial clinico del diente:", error);
             res.status(500).json({ error: "Ocurrió un error al buscar el historial clinico del diente" });
+        }
+    }
+
+    static viewtratamientos = async (req, res) => {
+        try {
+            const query = `
+                SELECT idtratamiento, nombretratamiento FROM tratamientos.tratamiento;
+            `;
+            const values = await pool.query(query);
+            res.status(200).json(values.rows);
+        } catch (error) {
+            console.error("Error al buscar los tratamientos:", error);
+            res.status(500).json({ error: "Ocurrió un error al buscar los tratamientos"});
+        }
+    }
+
+    static viewdientes = async (req, res) => {
+        try {
+            const query = `
+                SELECT iddiente, numerodiente FROM Clinica.diente;
+            `;
+            const values = await pool.query(query);
+            res.status(200).json(values.rows);
+        } catch (error) {
+            console.error("Error al buscar los dientes:", error);
+            res.status(500).json({ error: "Ocurrió un error al buscar los dientes"});
         }
     }
 

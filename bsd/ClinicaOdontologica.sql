@@ -799,6 +799,36 @@ DEFAULT nextval
 ALTER TABLE auditoria.horarioodontologoauditoria
     ADD CONSTRAINT PK_Horarioodontologoauditoria PRIMARY KEY (idauditoriahorarioodontologo);
 
+    CREATE SEQUENCE auditoria.seq_idauditoriacitatratamiento
+START 1 INCREMENT 1 MINVALUE 1 NO MAXVALUE CACHE 1;
+ALTER TABLE auditoria.CItaTratamientoAuditoria 
+    ALTER COLUMN idauditoriacitatratamiento 
+SET
+DEFAULT nextval
+('auditoria.seq_idauditoriacitatratamiento');
+ALTER TABLE auditoria.CItaTratamientoAuditoria
+    ADD CONSTRAINT PK_citatratamientoauditoria PRIMARY KEY (idauditoriacitatratamiento);
+
+    CREATE SEQUENCE auditoria.seq_idauditoriahistorialclinicodiente
+START 1 INCREMENT 1 MINVALUE 1 NO MAXVALUE CACHE 1;
+ALTER TABLE auditoria.HistorialClinicoDienteAuditoria 
+    ALTER COLUMN idauditoriahistorialclinicodiente
+SET
+DEFAULT nextval
+('auditoria.seq_idauditoriahistorialclinicodiente');
+ALTER TABLE auditoria.HistorialClinicoDienteAuditoria
+    ADD CONSTRAINT PK_historialclinicodienteauditoria PRIMARY KEY (idauditoriahistorialclinicodiente);
+
+        CREATE SEQUENCE auditoria.seq_idauditoriafacturacion
+START 1 INCREMENT 1 MINVALUE 1 NO MAXVALUE CACHE 1;
+ALTER TABLE auditoria.FacturacionAuditoria 
+    ALTER COLUMN idauditoriafacturacion
+SET
+DEFAULT nextval
+('auditoria.seq_idauditoriafacturacion');
+ALTER TABLE auditoria.FacturacionAuditoria
+    ADD CONSTRAINT PK_facturacionauditoria PRIMARY KEY (idauditoriafacturacion);
+
 -- Declaración de foráneas y primarias
 
 -- Llaves primarias
@@ -2837,6 +2867,30 @@ $$;
     --Prueba del procedimiento anterior
     CALL Facturacion.ActualizarEstadoFactura(6, 'Pagado');
 
+    CREATE OR REPLACE PROCEDURE Clinica.ActualizarEstadoAsistenciaCita (
+        p_codcita INT,
+        p_estado estadocitacpc
+    )  LANGUAGE plpgsql AS $$
+    BEGIN
+        IF p_codcita IS NULL THEN
+        RAISE EXCEPTION 'El código de la cita no puede ser nulo.';
+        END IF;
+        IF NOT EXISTS (
+            SELECT 1 FROM Clinica.Cita
+            WHERE codcita = p_codcita
+        ) THEN
+            RAISE EXCEPTION 'No existe una cita con el código de cita %.', p_codcita;
+        END IF;
+
+        UPDATE Clinica.Cita
+        SET estadocita = p_estado
+        WHERE codcita = p_codcita;
+    END;
+    $$;
+
+    CALL Clinica.ActualizarEstadoAsistenciaCita(8, 'Confirmada');
+
+
 
     CREATE OR REPLACE FUNCTION seguridad.iniciarSesion(
         pemail VARCHAR,
@@ -2847,6 +2901,7 @@ $$;
         Emailusuario TEXT,
         cododontologo INT,
         numdocumentopaciente INT,
+        numdocumentoodontolo INT,
         idRol INT,
         estadoUsuario estadoactivoInactivo
     ) AS $$
@@ -2858,6 +2913,7 @@ $$;
             CASE WHEN u.idRol = 1 AND o.especialidad='Jefe' THEN o.codOdontologo
             WHEN u.idRol = 2 THEN o.codOdontologo ELSE NULL END, -- odontólogo
             CASE WHEN u.idRol = 3 THEN p.numDocumentoPaciente ELSE NULL END, -- paciente
+            CASE WHEN u.idRol = 2 THEN o.numdocumentoodontolo ELSE NULL END,
             u.idRol,
             u.estadoUsuario
         FROM seguridad.usuario u
@@ -3070,7 +3126,8 @@ RETURNS TABLE (
     fechahorario DATE,
     horahorario TIME,
     estadoCita estadocitacpc,
-    observaciones TEXT
+    observaciones TEXT,
+    numeroidentificadorpaciente INT
 ) AS $$
 BEGIN
     RETURN QUERY
@@ -3079,10 +3136,12 @@ BEGIN
         h.fechahorario,
         h.horahorario,
         c.EstadoCita,
-        c.Observaciones::TEXT
+        c.Observaciones::TEXT,
+        c.numeroidentificadorpaciente
     FROM Clinica.Cita c
     INNER JOIN Personal.HorarioOdontologo h ON c.CodHorario = h.CodHorario
-    WHERE h.CodOdontologo = p_codOdontologo;
+    WHERE h.CodOdontologo = p_codOdontologo
+    ORDER BY fechahorario DESC;
 END;    
 $$ LANGUAGE plpgsql;
 

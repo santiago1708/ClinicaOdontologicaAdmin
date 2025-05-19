@@ -11,19 +11,27 @@ router.post('/imagenpaciente/:idusuario', upload.single('image'), async (req, re
         const imageBuffer = req.file.buffer;
         const mimeType = req.file.mimetype;
 
-        const imagePaciente = new ImagePaciente({
+        const imagenExistente = await ImagePaciente.findOne({ UserId: idusuario });
+
+        if (imagenExistente) {
+            await ImagePaciente.deleteOne({ UserId: idusuario });
+        }
+
+        const nuevaImagen = new ImagePaciente({
             UserId: idusuario,
             image: imageBuffer,
             MimeType: mimeType
-        })
+        });
 
-        await imagePaciente.save()
-        res.status(200).json({ message: 'Imagen guardada correctamente' });
+        await nuevaImagen.save();
+
+        res.status(200).json({ message: 'Imagen actualizada correctamente' });
     } catch (error) {
         console.error('Error al subir la imagen:', error);
         res.status(500).json({ error: 'Error al subir la imagen' });
     }
 });
+
 
 router.get('/getimage/:idusuario', ImagePacienteController.getImageByIdUsuario)
 
